@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nextbrain"
+version = "0.0.1"
+description = "A modular AI server inspired by the NeXT philosophy."
+readme = "README.md"
+requires-python = ">=3.11"
+
+authors = [
+  { name = "Luis Garcia", email = "lfga@mac.com" }
+]
