@@ -14,6 +14,6 @@ class NeXTBrain:
 
     def __init__(self):
         """Initialize a NeXTBrain instance."""
-        pass
+        self.version = "0.0.1"
     def __str__(self):
-        return "NeXTBrain v0.0.1"
+        return f"NeXTBrain v{self.version}"
