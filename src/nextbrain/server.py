@@ -7,10 +7,11 @@ class NeXTBrainServer:
     """Simple TCP server for NeXTBrain."""
 
     def __init__(
-            self, 
-            brain: NeXTBrain, 
-            host="0.0.0.0", 
-            port=5555):
+        self,
+        brain: NeXTBrain,
+        host: str = "0.0.0.0",
+        port: int = 5555,
+    ):
         self.brain = brain
         self.host = host
         self.port = port
@@ -30,7 +31,15 @@ class NeXTBrainServer:
                 with connection:
                     print(f"Connection from {address}")
 
-                    data = connection.recv(4096)
+                    data = b""
+
+                    while not data.endswith(b"\n"):
+                        chunk = connection.recv(4096)
+
+                        if not chunk:
+                            break
+
+                        data += chunk
 
                     if not data:
                         continue
@@ -39,4 +48,6 @@ class NeXTBrainServer:
 
                     response = self.brain.ask(prompt)
 
-                    connection.sendall(response.encode("utf-8"))
+                    connection.sendall(
+                        (response + "\n").encode("utf-8")
+                    )
