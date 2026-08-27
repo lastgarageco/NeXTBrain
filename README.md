@@ -4,22 +4,40 @@ NeXTBrain is a modular AI server inspired by the NeXT philosophy: elegant, under
 
 ## Current Status
 
-NeXTBrain is in the earliest stage of development.
+NeXTBrain is in active development.
 
-The current goals are:
+Current capabilities:
 
-- Provide a clean service layer in front of local AI models.
+- Modular AI provider architecture.
+- Ollama provider implementation.
+- TCP server for lightweight clients.
+- Local-first design.
+- Successfully tested from:
+  - macOS using `nc`
+  - NeXTSTEP using `telnet`
+
+Current goals:
+
 - Remain model-agnostic.
 - Support modern clients through simple APIs.
 - Support classic computers through lightweight, documented protocols.
-- Keep the system local-first and modular.
 - Grow one small, verified step at a time.
 
 ## First AI Provider
 
-The first AI provider used by NeXTBrain is Ollama running Qwen2.5-Coder:7B.
+The first AI provider is Ollama running Qwen2.5-Coder:7B.
 
 This is an implementation choice, not a permanent dependency.
+
+## Milestones
+
+### Milestone 1 — NeXTBrain Server ✅
+
+- Provider architecture completed.
+- Ollama integration completed.
+- TCP protocol implemented.
+- First successful communication from macOS.
+- First successful communication from a NeXTstation.
 
 ## Philosophy
 

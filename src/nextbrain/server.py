@@ -17,7 +17,7 @@ class NeXTBrainServer:
         self.port = port
 
     def serve_forever(self):
-        """Start the server and handle client requests."""
+        """Start the server and handle client connections."""
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
             server.bind((self.host, self.port))
@@ -31,23 +31,24 @@ class NeXTBrainServer:
                 with connection:
                     print(f"Connection from {address}")
 
-                    data = b""
+                    while True:
+                        data = b""
 
-                    while not data.endswith(b"\n"):
-                        chunk = connection.recv(4096)
+                        while not data.endswith(b"\n"):
+                            chunk = connection.recv(4096)
 
-                        if not chunk:
+                            if not chunk:
+                                break
+
+                            data += chunk
+
+                        if not data:
                             break
 
-                        data += chunk
+                        prompt = data.decode("utf-8").strip()
 
-                    if not data:
-                        continue
+                        response = self.brain.ask(prompt)
 
-                    prompt = data.decode("utf-8").strip()
-
-                    response = self.brain.ask(prompt)
-
-                    connection.sendall(
-                        (response + "\n").encode("utf-8")
-                    )
+                        connection.sendall(
+                            (response + "\n").encode("utf-8")
+                        )
