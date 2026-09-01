@@ -5,6 +5,13 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+int is_exit_command(const char *message)
+{
+    return strcasecmp(message, "quit\n") == 0 ||
+           strcasecmp(message, "eot\n") == 0 ||
+           strcasecmp(message, "eol\n") == 0;
+}
+
 int main(void)
 {
   int sock;
@@ -12,6 +19,7 @@ int main(void)
 
   struct sockaddr_in server_address;
 
+  char command[26];
   char message[4096]; 
   char buffer[4096];
 
@@ -39,34 +47,42 @@ int main(void)
 
   printf("Connected to NeXTBrain.\n");  
 
-  while(1)
+  while (1)
   {
-    printf("ASK> ");
-    fgets(message, sizeof(message), stdin);
+    printf("> ");
+    fgets(command, sizeof(command), stdin);
 
-    if (send(sock, message, strlen(message), 0) < 0)
+    if (strcmp(command, "ASK\n") == 0)
     {
-      printf("Could not send message.\n");
-      return 1;
-    }
+      while(1)
+      {
+        printf("ASK> ");
+        fgets(message, sizeof(message), stdin);
 
-    bytes_received = recv(
-      sock,
-      buffer,
-      sizeof(buffer) - 1,
-      0
-    );
+        if (is_exit_command(message))
+        {
+          break;
+        }
 
+        if (send(sock, message, strlen(message), 0) < 0)
+        {
+          printf("Could not send message.\n");
+          return 1;
+        }
 
-    if (bytes_received < 0)
-    {
-      printf("Could not receive response.\n");
-      return 1;
-    }
+        bytes_received = recv(sock, buffer, sizeof(buffer) - 1, 0);
+
+        if (bytes_received < 0)
+        {
+          printf("Could not receive response.\n");
+          return 1;
+        }
   
-    buffer[bytes_received] = '\0';
+        buffer[bytes_received] = '\0';
  
-    printf(">>> \n%s",buffer);
+        printf(">>> \n%s",buffer);
+      }
+    }
   }
 
   return 0;
