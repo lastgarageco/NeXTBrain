@@ -240,7 +240,34 @@ int main(void)
         }
         else if (is_status_command(command))
         {
-            printf("STATUS not implemented yet.\n");
+            if (send(sock, command, strlen(command), 0) < 0)
+            {
+                printf("Could not send STATUS request.\n");
+                return 1;
+            }
+
+            bytes_received = recv(
+                sock,
+                buffer,
+                sizeof(buffer) - 1,
+                0
+            );
+
+            if (bytes_received < 0)
+            {
+                printf("Could not receive STATUS response.\n");
+                return 1;
+            }
+
+            if (bytes_received == 0)
+            {
+                printf("NeXTBrain closed the connection.\n");
+                return 1;
+            }
+
+            buffer[bytes_received] = '\0';
+
+            printf("\n%s\n", buffer);
         }
         else if (is_shell_exit_command(command))
         {

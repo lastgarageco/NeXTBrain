@@ -16,7 +16,7 @@ class NeXTBrainServer:
         self.host = host
         self.port = port
 
-    def get_status(self):
+    def get_status(self, local_host: str):
         """Return the current NeXTBrain server status."""
 
         return (
@@ -26,7 +26,7 @@ class NeXTBrainServer:
             "Status     : ONLINE\n"
             f"Provider   : {self.brain.provider.name}\n"
             f"Model      : {self.brain.provider.model}\n"
-            f"Host       : {self.host}\n"
+            f"Host       : {local_host}\n"
             f"Port       : {self.port}"
         )
 
@@ -62,7 +62,7 @@ class NeXTBrainServer:
                         prompt = data.decode("utf-8").strip()
 
                         if prompt.upper() == "STATUS":
-                            response = self.get_status()
+                            response = self.get_status(connection.getsockname()[0])
                         else:
                             response = self.brain.ask(prompt)
 
