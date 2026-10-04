@@ -9,12 +9,26 @@ class NeXTBrainServer:
     def __init__(
         self,
         brain: NeXTBrain,
-        host: str = "0.0.0.0",
-        port: int = 5555,
+        host: str,
+        port: int,
     ):
         self.brain = brain
         self.host = host
         self.port = port
+
+    def get_status(self):
+        """Return the current NeXTBrain server status."""
+
+        return (
+            "NeXTBrain Server\n"
+            "----------------\n"
+            f"Version    : {self.brain.version}\n"
+            "Status     : ONLINE\n"
+            f"Provider   : {self.brain.provider.name}\n"
+            f"Model      : {self.brain.provider.model}\n"
+            f"Host       : {self.host}\n"
+            f"Port       : {self.port}"
+        )
 
     def serve_forever(self):
         """Start the server and handle client connections."""
@@ -47,7 +61,10 @@ class NeXTBrainServer:
 
                         prompt = data.decode("utf-8").strip()
 
-                        response = self.brain.ask(prompt)
+                        if prompt.upper() == "STATUS":
+                            response = self.get_status()
+                        else:
+                            response = self.brain.ask(prompt)
 
                         connection.sendall(
                             (response + "\n").encode("utf-8")

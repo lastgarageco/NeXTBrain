@@ -1,0 +1,7 @@
+# NeXTBrain Server Configuration
+
+HOST=0.0.0.0
+PORT=5555
+
+PROVIDER=Ollama
+MODEL=qwen3:8b
