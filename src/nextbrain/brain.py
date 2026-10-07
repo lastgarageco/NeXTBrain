@@ -22,10 +22,16 @@ class NeXTBrain:
     def __str__(self):
         return f"NeXTBrain v{self.version}"
 
-    def ask(self, prompt: str) -> str:
-        """Ask the configured AI provider a question."""
+    def ask(self, prompt: str, history: list[dict[str, str]]) -> str:
+        """Ask a question and record the successful exchange in history."""
 
         if self.provider is None:
             raise ValueError("NeXTBrain requires an AI provider.")
 
-        return self.provider.generate(prompt)
+        question = {"role": "user", "content": prompt}
+        response = self.provider.generate(history + [question])
+        history.extend([
+            question,
+            {"role": "assistant", "content": response},
+        ])
+        return response

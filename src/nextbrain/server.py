@@ -44,6 +44,7 @@ class NeXTBrainServer:
 
                 with connection:
                     print(f"Connection from {address}")
+                    history = []
 
                     while True:
                         data = b""
@@ -63,8 +64,11 @@ class NeXTBrainServer:
 
                         if prompt.upper() == "STATUS":
                             response = self.get_status(connection.getsockname()[0])
+                        elif prompt.upper() in ("EOT", "EOL"):
+                            history.clear()
+                            response = "OK"
                         else:
-                            response = self.brain.ask(prompt)
+                            response = self.brain.ask(prompt, history)
 
                         connection.sendall(
                             (response + "\n").encode("utf-8")

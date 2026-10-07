@@ -17,7 +17,14 @@ Current capabilities:
 - End-to-end `STATUS` reporting live server version, status, provider, model, and the actual server IP address and port for the current connection.
 - Local-first design.
 
-The client's conversation mode supports repeated requests; the server does not yet retain conversation history or state.
+The server keeps questions and answers in memory for each client connection, so
+follow-up questions have the context of previous exchanges. STATUS is not added
+to conversation history. Each ASK session is one conversation: EOT / EOL clear
+the history and leave ASK mode, so the next ASK starts fresh on the same
+connection. The client sends EOT / EOL to the server and silently consumes its
+`OK` acknowledgment. Disconnecting also discards history.
+History is not saved or automatically summarized;
+long conversations remain subject to the model's context limit.
 
 Current goals:
 

@@ -5,6 +5,6 @@ class AIProvider(ABC):
     """Base contract for all NeXTBrain AI providers."""
 
     @abstractmethod
-    def generate(self, prompt: str) -> str:
-        """Generate a text response for the supplied prompt."""
+    def generate(self, messages: list[dict[str, str]]) -> str:
+        """Return a reply to ordered role/content messages without modifying them."""
         raise NotImplementedError

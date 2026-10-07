@@ -199,34 +199,38 @@ int main(void)
                     return 0;
                 }
 
-                if (is_conversation_exit_command(message))
-                {
-                    break;
-                }
-
                 if (send(sock, message, strlen(message), 0) < 0)
                 {
                     printf("Could not send message.\n");
                     return 1;
                 }
 
-                bytes_received = recv(
-                    sock,
-                    buffer,
-                    sizeof(buffer) - 1,
-                    0
-                );
-
-                if (bytes_received < 0)
+                do
                 {
-                    printf("Could not receive response.\n");
-                    return 1;
-                }
+                    bytes_received = recv(
+                        sock,
+                        buffer,
+                        sizeof(buffer) - 1,
+                        0
+                    );
 
-                if (bytes_received == 0)
+                    if (bytes_received < 0)
+                    {
+                        printf("Could not receive response.\n");
+                        return 1;
+                    }
+
+                    if (bytes_received == 0)
+                    {
+                        printf("NeXTBrain closed the connection.\n");
+                        return 1;
+                    }
+                } while (is_conversation_exit_command(message) &&
+                         buffer[bytes_received - 1] != '\n');
+
+                if (is_conversation_exit_command(message))
                 {
-                    printf("NeXTBrain closed the connection.\n");
-                    return 1;
+                    break;
                 }
 
                 buffer[bytes_received] = '\0';

@@ -12,14 +12,14 @@ class OllamaProvider(AIProvider):
         self.model = model
         self.timeout = 120.0
 
-    def generate(self, prompt: str) -> str:
+    def generate(self, messages: list[dict[str, str]]) -> str:
         """Generate text using Ollama."""
 
-        url = f"{self.base_url}/api/generate"
+        url = f"{self.base_url}/api/chat"
 
         payload = {
             "model": self.model,
-            "prompt": prompt,
+            "messages": messages,
             "stream": False,
         }
 
@@ -33,4 +33,4 @@ class OllamaProvider(AIProvider):
 
         data = response.json()
 
-        return data["response"]
+        return data["message"]["content"]
