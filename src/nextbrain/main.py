@@ -1,6 +1,7 @@
 from nextbrain.brain import NeXTBrain
 from nextbrain.config import load_configuration
 from nextbrain.providers.ollama import OllamaProvider
+from nextbrain.providers.openai import OpenAIProvider
 from nextbrain.server import NeXTBrainServer
 
 
@@ -9,14 +10,17 @@ def main():
 
     provider_name = config["PROVIDER"]
 
-    if provider_name.lower() != "ollama":
+    if provider_name.lower() == "ollama":
+        provider = OllamaProvider(model=config["MODEL"])
+    elif provider_name.lower() == "openai":
+        provider = OpenAIProvider(
+            model=config["MODEL"],
+            api_key=config["OPENAI_API_KEY"],
+        )
+    else:
         raise ValueError(
             f"Unsupported provider: {provider_name}"
         )
-
-    provider = OllamaProvider(
-        model=config["MODEL"]
-    )
 
     brain = NeXTBrain(
         provider=provider

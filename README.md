@@ -4,12 +4,12 @@ NeXTBrain is a modular AI server inspired by the NeXT philosophy: elegant, under
 
 ## Current Status
 
-NeXTBrain version **0.0.1** is in active development.
+NeXTBrain version **0.0.2** is in active development.
 
 Current capabilities:
 
 - Modular, provider-oriented server architecture.
-- Ollama provider implementation.
+- Ollama and OpenAI providers, selectable through server configuration.
 - TCP server for lightweight clients.
 - Portable C client running on NeXTSTEP and modern macOS.
 - Simple client shell with `HELP`, `ASK`, `STATUS`, and `QUIT` / `EXIT` / `BYE`.
@@ -40,11 +40,33 @@ Current goals:
 
 Both `nbclient.conf.example` and `nbserver.conf.example` are committed to the repository as starting points for local configuration.
 
-## First AI Provider
+## AI Providers
 
-The current AI provider is Ollama, with `qwen3:8b` as the configured model.
+The example configuration uses Ollama with `qwen3:8b`. To use OpenAI, set
+the following values in your local `nbserver.conf`:
 
-This is an implementation choice, not a permanent dependency.
+```ini
+HOST=0.0.0.0
+PORT=5555
+PROVIDER=OpenAI
+MODEL=<your OpenAI model ID>
+OPENAI_API_KEY=<your API key>
+```
+
+Replace the placeholders with your model ID and API key. Provider names are
+case-insensitive. Restart the server after changing configuration.
+`OPENAI_API_KEY` is required only for OpenAI and is read from this file, not
+from the environment. Keep your key in the ignored local `nbserver.conf`,
+never in committed examples. It is not included in STATUS or logs.
+
+OpenAI uses the Responses API and sends the current conversation's questions
+and answers to OpenAI on each request. NeXTBrain retains history locally for
+the ASK session and requests `store=false`; it does not use remote conversation
+IDs. Ollama remains available for local inference. Both providers use the same
+conversation behavior and plain-text client protocol.
+
+Install the server and its HTTP dependency with `python -m pip install .`.
+Run the tests with `PYTHONPATH=src python -m unittest discover -s tests -v`.
 
 ## Milestones
 
@@ -69,3 +91,7 @@ See [MANIFESTO.md](MANIFESTO.md).
 ## Architecture
 
 See [docs/Architecture.md](docs/Architecture.md).
+
+## License
+
+NeXTBrain is licensed under the [MIT License](LICENSE).

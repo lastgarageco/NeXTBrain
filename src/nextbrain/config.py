@@ -24,6 +24,7 @@ def load_configuration():
             PORT
             PROVIDER
             MODEL
+            OPENAI_API_KEY (required only for OpenAI)
 
     Raises:
         FileNotFoundError:
@@ -65,6 +66,9 @@ def load_configuration():
             raise ValueError(
                 f"Missing configuration value: {key}"
             )
+
+    if config["PROVIDER"].lower() == "openai" and not config.get("OPENAI_API_KEY"):
+        raise ValueError("Missing configuration value: OPENAI_API_KEY")
 
     try:
         config["PORT"] = int(config["PORT"])

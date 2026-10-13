@@ -5,3 +5,8 @@ PORT=5555
 
 PROVIDER=Ollama
 MODEL=qwen3:8b
+
+# To use OpenAI, replace PROVIDER and MODEL above and add your API key:
+# PROVIDER=OpenAI
+# MODEL=<your OpenAI model ID>
+# OPENAI_API_KEY=<your API key>

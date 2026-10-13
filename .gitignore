@@ -4,11 +4,11 @@
 # Python cache
 __pycache__/
 *.pyc
+*.egg-info/
 
 # macOS
 .DS_Store
-*.egg-info
 
 # Local NeXTBrain configuration
 nbserver.conf
-nbclient.conf/
+nbclient.conf

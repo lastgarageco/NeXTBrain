@@ -16,7 +16,7 @@ class NeXTBrain:
 
     def __init__(self, provider: AIProvider | None = None):
         """Initialize a NeXTBrain instance."""
-        self.version = "0.0.1"
+        self.version = "0.0.2"
         self.provider = provider
 
     def __str__(self):
