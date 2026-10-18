@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.9)
+project(NeXTBrainMac C)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Retro68")
+    message(FATAL_ERROR "Use the Retro68 68K toolchain with Apple Universal Interfaces (MacTCP.h).")
+endif()
+add_application(NeXTBrain main.c network.c wire.c NeXTBrain.r)
+target_compile_definitions(NeXTBrain PRIVATE TARGET_API_MAC_CARBON=0 OPAQUE_TOOLBOX_STRUCTS=0)
+target_compile_options(NeXTBrain PRIVATE -std=c89 -Wall -Wextra)
