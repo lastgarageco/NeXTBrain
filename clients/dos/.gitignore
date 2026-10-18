@@ -1,0 +1,8 @@
+NBCLIENT.CFG
+nbclient.cfg
+*.exe
+*.EXE
+*.obj
+*.OBJ
+*.err
+*.ERR
